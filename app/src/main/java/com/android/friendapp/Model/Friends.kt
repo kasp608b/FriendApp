@@ -1,8 +1,8 @@
 package com.android.friendapp.Model
 
-class Friends {
+object Friends {
 
-    val mFriends = arrayOf<BEFriend>(
+    val mFriends = mutableListOf<BEFriend>(
         BEFriend("Jonas", "123", true),
         BEFriend("Anders", "1234", false),
         BEFriend("Nikolaj", "12345", true),
@@ -26,7 +26,7 @@ class Friends {
         BEFriend("Rocio", "12121212", true)
     )
 
-    fun getAll(): Array<BEFriend> = mFriends
+    fun getAll(): MutableList<BEFriend> = mFriends
 
 
     fun getAllNames(): Array<String>  =  mFriends.map { p -> p.name }.toTypedArray()
