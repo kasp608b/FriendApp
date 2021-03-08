@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FriendApp</string>
+    <string name="Save_Text">Save</string>
+    <string name="Delete_Text">Delete</string>
+    <string name="Back_Text">Back</string>
+    <string name="Header">Friends - Main</string>
 </resources>

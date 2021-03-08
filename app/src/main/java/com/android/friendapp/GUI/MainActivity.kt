@@ -4,8 +4,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListAdapter
+import com.android.friendapp.Model.BEFriend
 import com.android.friendapp.Model.Friends
 import com.android.friendapp.R
 import kotlinx.android.synthetic.main.activity_main.*
@@ -52,6 +54,18 @@ class MainActivity : AppCompatActivity()  {
         friendList.adapter = adapter
 
         friendList.setOnItemClickListener { _, _, position, _ -> onListItemClick(position) }
+    }
+
+     fun onClickCreate(view: View){
+         val intent = Intent(this, DetailActivity::class.java)
+         val friend = BEFriend(Friends.nextId, "DefaultName", "DefaultPhoneNumber", false)
+         Friends.getAll().add(friend)
+         Friends.nextId++
+         intent.putExtra("friend", friend)
+         /*intent.putExtra("name", friend.name )
+         intent.putExtra("phone", friend.phone)
+         intent.putExtra("favorite", friend.isFavorite)*/
+         startActivity(intent)
     }
 
     override fun onStart() {
