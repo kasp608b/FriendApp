@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity()  {
 
      fun onClickCreate(view: View){
          val intent = Intent(this, DetailActivity::class.java)
-         val friend = BEFriend(Friends.nextId, "DefaultName", "DefaultPhoneNumber", false)
+         val friend = BEFriend(Friends.nextId, "DefaultName", "DefaultPhoneNumber", false, "DefaultEmail@hotmail.com", "https://www.msn.com/da-dk/")
          Friends.getAll().add(friend)
          Friends.nextId++
          intent.putExtra("friend", friend)
