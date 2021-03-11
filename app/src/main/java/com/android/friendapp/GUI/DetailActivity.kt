@@ -1,6 +1,13 @@
 package com.android.friendapp.GUI
 
+import android.Manifest
+import android.app.AlertDialog
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.telephony.SmsManager
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -11,6 +18,9 @@ import com.android.friendapp.R
 import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : AppCompatActivity() {
+
+    val PHONE_NO = "12345678"
+    val TAG = "xyz"
     private lateinit var friend:BEFriend
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +33,8 @@ class DetailActivity : AppCompatActivity() {
             friend = extras.getSerializable("friend") as BEFriend
             tvName.setText(friend.name)
             tvPhone.setText(friend.phone)
+            tvEmail.setText(friend.email)
+            tvUrl.setText(friend.url)
             imgFavorite.setImageResource(if (friend.isFavorite) R.drawable.ok else R.drawable.notok)
             imgFavorite.setOnClickListener{ v -> onClickFavorite()}
         }
@@ -39,6 +51,8 @@ class DetailActivity : AppCompatActivity() {
             val friendToUpdateIndex = Friends.mFriends.indexOf(Friends.mFriends.find { v -> v.id == friend.id  })
             friend.name = tvName.text.toString()
             friend.phone = tvPhone.text.toString()
+            friend.email = tvEmail.text.toString()
+            friend.url = tvUrl.text.toString()
             Friends.getAll()[friendToUpdateIndex] = friend
             Log.d("xyz", "Delete ${friend.id.toString()}")
             finish()
@@ -70,6 +84,42 @@ class DetailActivity : AppCompatActivity() {
             friend.isFavorite = true
             imgFavorite.setImageResource(R.drawable.ok)
         }
+    }
+
+    fun onClickBrowser(view: View) {
+        val url = tvUrl.text.toString()
+        val i = Intent(Intent.ACTION_VIEW)
+        i.data = Uri.parse(url)
+        startActivity(i)
+    }
+    fun onClickEmail(view: View) {
+        val emailIntent = Intent(Intent.ACTION_SEND)
+        emailIntent.type = "plain/text"
+        val receivers = arrayOf(tvEmail.toString())
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, receivers)
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Test")
+        emailIntent.putExtra(Intent.EXTRA_TEXT,
+            "Hej, Hope that it is ok, Best Regards android...;-)")
+        startActivity(emailIntent)
+    }
+    fun onClickCall(view: View) {
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:" + tvPhone.text.toString())
+        startActivity(intent)
+    }
+
+
+    private fun startSMSActivity() {
+        val sendIntent = Intent(Intent.ACTION_VIEW)
+        sendIntent.data = Uri.parse("sms:" + tvPhone.text.toString())
+        sendIntent.putExtra("sms_body", "Hi, it goes well on the android course...")
+        startActivity(sendIntent)
+    }
+
+
+
+    fun onClickSms(view: View) {
+        startSMSActivity()
     }
 
 
