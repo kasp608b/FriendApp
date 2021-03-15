@@ -1,30 +1,48 @@
 package com.android.friendapp.GUI
 
 import android.Manifest
+import android.app.Activity.RESULT_CANCELED
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.telephony.SmsManager
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.android.friendapp.Model.BEFriend
 import com.android.friendapp.Model.Friends
 import com.android.friendapp.R
 import kotlinx.android.synthetic.main.activity_detail.*
+import java.io.File
 
 class DetailActivity : AppCompatActivity() {
 
     val PHONE_NO = "12345678"
     val TAG = "xyz"
+    private val PERMISSION_REQUEST_CODE = 1
+    val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_FILE = 101
+    val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP = 102
+
+    var mFile: File? = null
+
     private lateinit var friend:BEFriend
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
+        checkPermissions()
         if (intent.extras != null) {
             val extras: Bundle = intent.extras!!
             /*val name = extras.getString("name")
@@ -122,5 +140,62 @@ class DetailActivity : AppCompatActivity() {
         startSMSActivity()
     }
 
+    private fun checkPermissions() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+        val permissions = mutableListOf<String>()
+        if ( ! isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE) ) permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if ( ! isGranted(Manifest.permission.CAMERA) ) permissions.add(Manifest.permission.CAMERA)
+        if (permissions.size > 0)
+            ActivityCompat.requestPermissions(this, permissions.toTypedArray(), PERMISSION_REQUEST_CODE)
+    }
+    private fun isGranted(permission: String): Boolean =
+            ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 
-}
+    fun onClickpicture(view: View) {
+
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP)
+        } else Log.d(TAG, "camera app could NOT be started")
+
+
+
+    }
+
+    // show the image [bmap] in the imageview [img] - and put meta data in [txt]
+    private fun showImageFromBitmap(img: ImageView, bmap: Bitmap) {
+        img.setImageBitmap(bmap)
+        img.setLayoutParams(RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        img.setBackgroundColor(Color.RED)
+
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val mImage = findViewById<ImageView>(R.id.imgView)
+
+        when (requestCode) {
+
+            CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP ->
+                if (resultCode == RESULT_OK) {
+                    val extras = data!!.extras
+                    val imageBitmap = extras!!["data"] as Bitmap
+                    showImageFromBitmap(mImage, imageBitmap)
+                } else handleOther(resultCode)
+        }
+
+        }
+    private fun handleOther(resultCode: Int) {
+        if (resultCode == RESULT_CANCELED)
+            Toast.makeText(this, "Canceled...", Toast.LENGTH_LONG).show()
+        else Toast.makeText(this, "Picture NOT taken - unknown error...", Toast.LENGTH_LONG).show()
+    }
+
+    }
+
+
+
+
