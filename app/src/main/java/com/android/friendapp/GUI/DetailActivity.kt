@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.telephony.SmsManager
 import android.util.Log
@@ -21,11 +22,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import com.android.friendapp.Model.BEFriend
 import com.android.friendapp.Model.Friends
 import com.android.friendapp.R
 import kotlinx.android.synthetic.main.activity_detail.*
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DetailActivity : AppCompatActivity() {
 
@@ -156,9 +160,9 @@ class DetailActivity : AppCompatActivity() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
 
-        if (intent.resolveActivity(packageManager) != null) {
+
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP)
-        } else Log.d(TAG, "camera app could NOT be started")
+
 
 
 
@@ -167,8 +171,8 @@ class DetailActivity : AppCompatActivity() {
     // show the image [bmap] in the imageview [img] - and put meta data in [txt]
     private fun showImageFromBitmap(img: ImageView, bmap: Bitmap) {
         img.setImageBitmap(bmap)
-        img.setLayoutParams(RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-        img.setBackgroundColor(Color.RED)
+        //img.setLayoutParams(RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        //img.setBackgroundColor(Color.RED)
 
 
     }
@@ -176,8 +180,12 @@ class DetailActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val mImage = findViewById<ImageView>(R.id.imgView)
-
         when (requestCode) {
+
+            CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_FILE ->
+                if (resultCode == RESULT_OK)
+                    showImageFromFile(mImage, mFile!!)
+                else handleOther(resultCode)
 
             CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP ->
                 if (resultCode == RESULT_OK) {
@@ -186,12 +194,67 @@ class DetailActivity : AppCompatActivity() {
                     showImageFromBitmap(mImage, imageBitmap)
                 } else handleOther(resultCode)
         }
-
-        }
+    }
     private fun handleOther(resultCode: Int) {
         if (resultCode == RESULT_CANCELED)
             Toast.makeText(this, "Canceled...", Toast.LENGTH_LONG).show()
         else Toast.makeText(this, "Picture NOT taken - unknown error...", Toast.LENGTH_LONG).show()
+    }
+
+    // show the image allocated in [f] in imageview [img]. Show meta data in [txt]
+    private fun showImageFromFile(img: ImageView,  f: File) {
+        img.setImageURI(Uri.fromFile(f))
+        img.setBackgroundColor(Color.RED)
+        //mImage.setRotation(90);
+
+    }
+
+    fun onTakeByFile(view: View) {
+        mFile = getOutputMediaFile("Camera01") // create a file to save the image
+
+        if (mFile == null) {
+            Toast.makeText(this, "Could not create file...", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        // create Intent to take a picture
+
+        // create Intent to take a picture
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        val applicationId = "com.android.friendapp"
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(
+                this,
+                "${applicationId}.provider",  //use your app signature + ".provider"
+                mFile!!))
+
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_FILE)
+        } else Log.d(TAG, "camera app could NOT be started")
+
+    }
+
+    // return a new file with a timestamp name in a folder named [folder] in
+    // the external directory for pictures.
+    // Return null if the file cannot be created
+    private fun getOutputMediaFile(folder: String): File? {
+        // in an emulated device you can see the external files in /sdcard/Android/data/<your app>.
+        val mediaStorageDir = File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), folder)
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(TAG, "failed to create directory")
+                return null
+            }
+        }
+
+        // Create a media file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val postfix = "jpg"
+        val prefix = "IMG"
+        return File(mediaStorageDir.path +
+                File.separator + prefix +
+                "_" + timeStamp + "." + postfix)
     }
 
     }
