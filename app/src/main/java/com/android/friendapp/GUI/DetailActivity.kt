@@ -59,6 +59,14 @@ class DetailActivity : AppCompatActivity() {
             tvUrl.setText(friend.url)
             imgFavorite.setImageResource(if (friend.isFavorite) R.drawable.ok else R.drawable.notok)
             imgFavorite.setOnClickListener{ v -> onClickFavorite()}
+
+            if(friend.pictureFile != null)
+            {
+                val mImage = findViewById<ImageView>(R.id.imgView)
+                showImageFromFile(mImage, friend.pictureFile!!)
+            }
+
+
         }
         else
         {
@@ -75,6 +83,7 @@ class DetailActivity : AppCompatActivity() {
             friend.phone = tvPhone.text.toString()
             friend.email = tvEmail.text.toString()
             friend.url = tvUrl.text.toString()
+            friend.pictureFile = mFile
             Friends.getAll()[friendToUpdateIndex] = friend
             Log.d("xyz", "Delete ${friend.id.toString()}")
             finish()
