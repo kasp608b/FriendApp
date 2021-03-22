@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+
 }
 
 android {
@@ -34,6 +36,9 @@ android {
 }
 
 dependencies {
+    //roomDb
+    implementation 'androidx.room:room-runtime:2.2.6'
+    kapt 'androidx.room:room-compiler:2.2.6'
 
     def camerax_version = "1.0.0-beta07"
 // CameraX core library using camera2 implementation
