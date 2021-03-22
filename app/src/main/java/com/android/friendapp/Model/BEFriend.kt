@@ -13,5 +13,5 @@ class BEFriend(  @PrimaryKey(autoGenerate = true) var id:Int,
                  var isFavorite: Boolean,
                  var email: String,
                  var url: String,
-                 var pictureFile: File?) : Serializable {
+                 var pictureFile: String?) : Serializable {
 }

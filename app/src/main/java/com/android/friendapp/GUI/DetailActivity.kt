@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import com.android.friendapp.Model.BEFriend
+import com.android.friendapp.Model.FriendRepositoryinDB
 import com.android.friendapp.Model.Friends
 import com.android.friendapp.R
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -63,7 +64,8 @@ class DetailActivity : AppCompatActivity() {
             if(friend.pictureFile != null)
             {
                 val mImage = findViewById<ImageView>(R.id.imgView)
-                showImageFromFile(mImage, friend.pictureFile!!)
+                val File = File(friend.pictureFile!!)
+                showImageFromFile(mImage, File)
             }
 
 
@@ -76,15 +78,17 @@ class DetailActivity : AppCompatActivity() {
 
     fun onClickBack(view: View) { finish() }
     fun onClickSave(view: View) {
+        val mRep = FriendRepositoryinDB.get()
         if(!(tvName.text.isBlank() || tvPhone.text.isBlank()))
         {
-            val friendToUpdateIndex = Friends.mFriends.indexOf(Friends.mFriends.find { v -> v.id == friend.id  })
+            //val friendToUpdateIndex = Friends.mFriends.indexOf(Friends.mFriends.find { v -> v.id == friend.id  })
             friend.name = tvName.text.toString()
             friend.phone = tvPhone.text.toString()
             friend.email = tvEmail.text.toString()
             friend.url = tvUrl.text.toString()
-            friend.pictureFile = mFile
-            Friends.getAll()[friendToUpdateIndex] = friend
+            friend.pictureFile = mFile?.absolutePath
+            //Friends.getAll()[friendToUpdateIndex] = friend
+            mRep.update(friend)
             Log.d("xyz", "Delete ${friend.id.toString()}")
             finish()
         }
@@ -98,9 +102,12 @@ class DetailActivity : AppCompatActivity() {
         }
     }
     fun onClickDelete(view: View) {
-        val friendToRemove = Friends.mFriends.find { v -> v.id == friend.id  }
-        val yoink = Friends.mFriends.remove(friendToRemove)
-        Log.d("xyz", "Delete $yoink")
+        val mRep = FriendRepositoryinDB.get()
+        /*val friendToRemove = Friends.mFriends.find { v -> v.id == friend.id  }
+        val yoink = Friends.mFriends.remove(friendToRemove)*/
+
+        mRep.delete(friend)
+        //Log.d("xyz", "Delete $yoink")
         finish()
     }
 
