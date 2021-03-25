@@ -1,17 +1,15 @@
 package com.android.friendapp.GUI
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListAdapter
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.android.friendapp.Model.BEFriend
 import com.android.friendapp.Model.FriendRepositoryinDB
-import com.android.friendapp.Model.Friends
 import com.android.friendapp.R
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -26,8 +24,10 @@ class MainActivity : AppCompatActivity()  {
     }
 
 
-    fun onListItemClick( position: Int ) {
+    fun onListItemClick(position: Int) {
         val mRep = FriendRepositoryinDB.get()
+
+        val selectedFromList: String = friendList.getItemAtPosition(position).toString()
 
 
 
@@ -46,9 +46,9 @@ class MainActivity : AppCompatActivity()  {
             cache = persons;
             val asStrings = persons.map { p -> "${p.id}, ${p.name}"}
             val adapter: ListAdapter = ArrayAdapter(
-                this,
-                android.R.layout.simple_list_item_1,
-                asStrings.toTypedArray()
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    asStrings.toTypedArray()
             )
             friendList.adapter = adapter
         }
