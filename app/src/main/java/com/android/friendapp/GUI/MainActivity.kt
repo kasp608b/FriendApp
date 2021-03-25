@@ -7,10 +7,12 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.android.friendapp.Model.BEFriend
 import com.android.friendapp.Model.FriendRepositoryinDB
+import com.android.friendapp.Model.observeOnce
 import com.android.friendapp.R
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -32,13 +34,29 @@ class MainActivity : AppCompatActivity()  {
         val valueOnList = selectedFromList.substring(0, selectedFromList.indexOf(","));
         Log.d("TEST", "The position of selected person is: " + valueOnList);
 
-
-
+        val id = valueOnList.toInt()
+/*
         val intent = Intent(this, DetailActivity::class.java)
 
         intent.putExtra("friend", cache!![position])
 
         startActivity(intent)
+*/
+        val friendObserver = Observer<BEFriend> { friend ->
+            if (friend != null)
+            {
+                val intent = Intent(this, DetailActivity::class.java)
+                intent.putExtra("friend", friend)
+
+                startActivity(intent)
+
+            }
+
+        }
+
+        mRep.getById(id).observeOnce(this , friendObserver)
+
+
 
     }
 
