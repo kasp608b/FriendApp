@@ -2,6 +2,7 @@ package com.android.friendapp.GUI
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -27,8 +28,9 @@ class MainActivity : AppCompatActivity()  {
     fun onListItemClick(position: Int) {
         val mRep = FriendRepositoryinDB.get()
 
-        val selectedFromList: String = friendList.getItemAtPosition(position).toString()
-
+        val selectedFromList: String = friendList.getItemAtPosition(position).toString();
+        val valueOnList = selectedFromList.substring(0, selectedFromList.indexOf(","));
+        Log.d("TEST", "The position of selected person is: " + valueOnList);
 
 
 
