@@ -36,6 +36,10 @@ import java.text.SimpleDateFormat
 import com.android.friendapp.Model.observeOnce
 import java.util.*
 import androidx.lifecycle.Observer
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 class DetailActivity : AppCompatActivity() {
 
@@ -62,7 +66,7 @@ class DetailActivity : AppCompatActivity() {
             tvName.setText(friend.name)
             tvPhone.setText(friend.phone)
             tvEmail.setText(friend.email)
-            tvUrl.setText(friend.url)
+            tvLocation.setText(friend.location)
             imgFavorite.setImageResource(if (friend.isFavorite) R.drawable.ok else R.drawable.notok)
             imgFavorite.setOnClickListener{ v -> onClickFavorite()}
 
@@ -71,6 +75,11 @@ class DetailActivity : AppCompatActivity() {
                 val mImage = findViewById<ImageView>(R.id.imgView)
                 val File = File(friend.pictureFile!!)
                 showImageFromFile(mImage, File)
+            }
+
+            if(friend.location != null){
+
+                tvLocation.setText(friend.location)
             }
 
 
@@ -92,6 +101,7 @@ class DetailActivity : AppCompatActivity() {
             friend.email = tvEmail.text.toString()
             friend.url = tvUrl.text.toString()
             friend.pictureFile = mFile?.absolutePath
+            friend.location = tvLocation.text.toString()
             //Friends.getAll()[friendToUpdateIndex] = friend
 
             if(friend.id == 0) {
@@ -170,7 +180,7 @@ class DetailActivity : AppCompatActivity() {
         // The type of location is Location? - it can be null... handle cases
 
         if (location != null) {
-            tvLocation.setText("Location = ${location.latitude}, ${location.longitude}")
+            tvLocation.setText(" ${location.latitude}, ${location.longitude}")
         } else
             tvLocation.setText("Location = null")
     }
@@ -311,6 +321,68 @@ class DetailActivity : AppCompatActivity() {
         return File(mediaStorageDir.path +
                 File.separator + prefix +
                 "_" + timeStamp + "." + postfix)
+    }
+
+    @SuppressLint("MissingPermission")
+     fun onClickDistance(view: View){
+        val unsplitlocation = tvLocation.text.toString()
+        if(!unsplitlocation.isEmpty()){
+            val delim = ","
+            val splitlocation = unsplitlocation.split(delim)
+            Log.d(TAG, splitlocation.toString())
+            val freindlatitude = splitlocation[0]
+
+            Log.d(TAG, splitlocation[0])
+            Log.d(TAG, splitlocation[1])
+            val freindlongitude  = splitlocation[1]
+
+            //convert to float
+            val freindlatitudeFloat = freindlatitude.toFloatOrNull()
+            val freindlongitudeFloat = freindlongitude.toFloatOrNull()
+
+            if(freindlatitudeFloat == null || freindlongitudeFloat == null ){
+
+                return
+            }
+
+            if (!isPermissionGiven()) {
+                tvLocation.setText("No permission given")
+                return
+            }
+
+            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+
+            val latitude = location?.latitude
+            val longitude = location?.longitude
+
+
+
+            val R = 6371e3; // metres
+            val φ1 = freindlatitudeFloat * Math.PI/180; // φ, λ in radians
+            val φ2 = (latitude?.times(Math.PI) ?: 0.0 ) /180;
+            val Δφ = ((latitude?.minus(freindlatitudeFloat))?.times(Math.PI) ?: 0.0) /180;
+            var Δλ = 0.0
+            if (longitude != null) {
+                 Δλ = (longitude-freindlongitudeFloat) * Math.PI/180
+            }
+
+            val a = sin(Δφ/2) * sin(Δφ/2) +
+                    cos(φ1) * cos(φ2) *
+                    sin(Δλ/2) * sin(Δλ/2)
+            val c = 2 * atan2(sqrt(a), sqrt(1-a));
+
+            val d = R * c; // in metres
+
+            tvDistance.text = d.toString()
+
+
+
+
+
+        }
+
+
     }
 
     }
