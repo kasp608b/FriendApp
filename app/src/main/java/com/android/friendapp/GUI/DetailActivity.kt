@@ -1,12 +1,15 @@
 package com.android.friendapp.GUI
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_CANCELED
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -153,6 +156,30 @@ class DetailActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_DIAL)
         intent.data = Uri.parse("tel:" + tvPhone.text.toString())
         startActivity(intent)
+    }
+
+    @SuppressLint("MissingPermission")
+    fun onClickLocation(view: View) {
+        if (!isPermissionGiven()) {
+            tvLocation.text = "No permission given"
+            return
+        }
+
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        // The type of location is Location? - it can be null... handle cases
+
+        if (location != null) {
+            tvCurrentLocation.text = "Location = ${location.latitude}, ${location.longitude}"
+        } else
+            tvCurrentLocation.text = "Location = null"
+    }
+
+    private fun isPermissionGiven(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return permissions.all { p -> checkSelfPermission(p) == PackageManager.PERMISSION_GRANTED}
+        }
+        return true
     }
 
 
