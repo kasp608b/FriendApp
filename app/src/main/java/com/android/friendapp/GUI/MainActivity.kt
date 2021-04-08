@@ -95,9 +95,16 @@ class MainActivity : AppCompatActivity()  {
          startActivity(intent)
     }
 
+    fun onClickMap(view: View) {
+        val intent = Intent(this, MapsActivity::class.java)
+        startActivity(intent)
+    }
+
     override fun onStart() {
         super.onStart()
         refresh()
     }
+
+
 
 }
