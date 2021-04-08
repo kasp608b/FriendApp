@@ -30,7 +30,9 @@ import com.android.friendapp.R
 import kotlinx.android.synthetic.main.activity_detail.*
 import java.io.File
 import java.text.SimpleDateFormat
+import com.android.friendapp.Model.observeOnce
 import java.util.*
+import androidx.lifecycle.Observer
 
 class DetailActivity : AppCompatActivity() {
 
@@ -88,7 +90,14 @@ class DetailActivity : AppCompatActivity() {
             friend.url = tvUrl.text.toString()
             friend.pictureFile = mFile?.absolutePath
             //Friends.getAll()[friendToUpdateIndex] = friend
-            mRep.insert(friend)
+
+            if(friend.id == 0) {
+                mRep.insert(friend)
+            }
+            else{
+                mRep.update(friend)
+            }
+
             Log.d("xyz", "Delete ${friend.id.toString()}")
             finish()
         }
