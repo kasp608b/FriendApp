@@ -88,7 +88,7 @@ class DetailActivity : AppCompatActivity() {
             friend.url = tvUrl.text.toString()
             friend.pictureFile = mFile?.absolutePath
             //Friends.getAll()[friendToUpdateIndex] = friend
-            mRep.update(friend)
+            mRep.insert(friend)
             Log.d("xyz", "Delete ${friend.id.toString()}")
             finish()
         }
