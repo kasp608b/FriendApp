@@ -88,7 +88,13 @@ class DetailActivity : AppCompatActivity() {
             friend.url = tvUrl.text.toString()
             friend.pictureFile = mFile?.absolutePath
             //Friends.getAll()[friendToUpdateIndex] = friend
-            mRep.insert(friend)
+            if(!mRep.getById(friend.id))
+            {
+                mRep.insert(friend)
+            } else
+            {
+                mRep.update(friend)
+            }
             Log.d("xyz", "Delete ${friend.id.toString()}")
             finish()
         }
@@ -165,8 +171,11 @@ class DetailActivity : AppCompatActivity() {
         val permissions = mutableListOf<String>()
         if ( ! isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE) ) permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         if ( ! isGranted(Manifest.permission.CAMERA) ) permissions.add(Manifest.permission.CAMERA)
+        if ( ! isGranted(Manifest.permission.ACCESS_FINE_LOCATION) ) permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        if ( ! isGranted(Manifest.permission.ACCESS_COARSE_LOCATION) ) permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
         if (permissions.size > 0)
             ActivityCompat.requestPermissions(this, permissions.toTypedArray(), PERMISSION_REQUEST_CODE)
+
     }
     private fun isGranted(permission: String): Boolean =
             ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
