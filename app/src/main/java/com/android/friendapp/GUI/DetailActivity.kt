@@ -159,9 +159,9 @@ class DetailActivity : AppCompatActivity() {
     }
 
     @SuppressLint("MissingPermission")
-    fun onClickLocation(view: View) {
+    fun onClickGetLocation(view: View) {
         if (!isPermissionGiven()) {
-            tvLocation.text = "No permission given"
+            tvLocation.setText("No permission given")
             return
         }
 
@@ -170,9 +170,9 @@ class DetailActivity : AppCompatActivity() {
         // The type of location is Location? - it can be null... handle cases
 
         if (location != null) {
-            tvCurrentLocation.text = "Location = ${location.latitude}, ${location.longitude}"
+            tvLocation.setText("Location = ${location.latitude}, ${location.longitude}")
         } else
-            tvCurrentLocation.text = "Location = null"
+            tvLocation.setText("Location = null")
     }
 
     private fun isPermissionGiven(): Boolean {
@@ -181,6 +181,7 @@ class DetailActivity : AppCompatActivity() {
         }
         return true
     }
+
 
 
     private fun startSMSActivity() {
@@ -195,10 +196,10 @@ class DetailActivity : AppCompatActivity() {
     fun onClickSms(view: View) {
         startSMSActivity()
     }
-
+    val permissions = mutableListOf<String>()
     private fun checkPermissions() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
-        val permissions = mutableListOf<String>()
+
         if ( ! isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE) ) permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         if ( ! isGranted(Manifest.permission.CAMERA) ) permissions.add(Manifest.permission.CAMERA)
         if ( ! isGranted(Manifest.permission.ACCESS_FINE_LOCATION) ) permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)

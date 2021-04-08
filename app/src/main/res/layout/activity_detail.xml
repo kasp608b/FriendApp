@@ -139,7 +139,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="5dp"
-        android:onClick="onClickBrowser"
+        android:onClick="onClickGetLocation"
         android:text="location"
         app:layout_constraintBottom_toBottomOf="@+id/tvLocation"
         app:layout_constraintStart_toEndOf="@+id/tvLocation"
