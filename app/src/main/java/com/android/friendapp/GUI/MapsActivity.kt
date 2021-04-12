@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.activity_maps.*
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private lateinit var mMap: GoogleMap
+    private var mLastIndex = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,13 +46,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
      */
     override fun onMapReady(googleMap: GoogleMap)  {
         mMap = googleMap
-        mMap.setOnMarkerClickListener(this)
         val mRep = FriendRepositoryinDB.get()
         val friendObserver = Observer<List<BEFriend>>{ friends ->
             val list = friends;
+            var i = 1
             for (friend: BEFriend in list)
             {
-                if (friend.location !== null)
+                if (friend.location !== null && friend.location != "")
                 {
                     val unsplitlocation = friend.location
                     val delim = ","
@@ -62,8 +63,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                     val freindlongitudeFloat = freindlongitude.toDouble()
                     val location = LatLng(freindlatitudeFloat, freindlongitudeFloat)
                     val marker = MarkerOptions().position(location).title("${friend.id}, ${friend.name}")
-                    val locationMarker =  mMap.addMarker(marker)
-                    locationMarker.showInfoWindow()
+                    val locationMarker = mMap.addMarker(marker)
+                    locationMarker.tag = i
+                    i++
 
                 }
             }
@@ -71,44 +73,62 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         mRep.getAll().observe(this, friendObserver)
 
+        mMap.setOnMarkerClickListener(this)
+
         /*val sydney = LatLng(-34.0, 151.0)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))*/
 
-        setupZoomlevels()
+        //setupZoomlevels()
     }
 
-    private fun setupZoomlevels() {
+   /* private fun setupZoomlevels() {
         spinnerZoomLevel.adapter =
             ArrayAdapter.createFromResource(
                 this,
                 R.array.zoomlevels,
                 android.R.layout.simple_spinner_dropdown_item
             )
-    }
+    }*/
 
     fun onClickBack(view: View) { finish() }
 
     override fun onMarkerClick(p0: Marker?): Boolean {
-        val mRep = FriendRepositoryinDB.get()
-        val valueOnList = p0?.title?.substring(0, p0?.title.indexOf(","))
-        val id = valueOnList?.toInt()
-        val friendObserver = Observer<BEFriend> { friend ->
-            if (friend != null)
+
+        if (p0 != null)
+        {
+            var index = p0.tag as Int
+            if(mLastIndex != index)
             {
-                val intent = Intent(this, DetailActivity::class.java)
-                intent.putExtra("friend", friend)
+                p0.showInfoWindow()
+                mLastIndex = index
+            } else {
+                p0.hideInfoWindow()
+                mLastIndex = -1
+                val mRep = FriendRepositoryinDB.get()
+                val valueOnList = p0.title?.substring(0, p0.title.indexOf(","))
+                val id = valueOnList?.toInt()
+                val friendObserver = Observer<BEFriend> { friend ->
+                    if (friend != null)
+                    {
+                        val intent = Intent(this, DetailActivity::class.java)
+                        intent.putExtra("friend", friend)
 
-                startActivity(intent)
+                        startActivity(intent)
 
+                    }
+
+                }
+
+                if (id != null) {
+                    mRep.getById(id).observeOnce(this , friendObserver)
+                    return true
+                }
+                return false
             }
-
-        }
-
-        if (id != null) {
-            mRep.getById(id).observeOnce(this , friendObserver)
-            return true
         }
         return false
+
+
     }
 }

@@ -28,6 +28,7 @@ tools:context=".GUI.MapsActivity">
         android:layout_alignRight="@+id/map"
         android:onClick="onClickBack" />
 
+<!--
 <Spinner
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -35,5 +36,6 @@ tools:context=".GUI.MapsActivity">
     android:layout_alignBottom="@+id/map"
     android:layout_alignRight="@+id/map"
     android:spinnerMode="dropdown" />
+    -->
 
 </RelativeLayout>
