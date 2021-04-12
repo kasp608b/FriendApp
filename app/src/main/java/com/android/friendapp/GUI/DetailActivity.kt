@@ -36,10 +36,7 @@ import java.text.SimpleDateFormat
 import com.android.friendapp.Model.observeOnce
 import java.util.*
 import androidx.lifecycle.Observer
-import kotlin.math.atan2
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class DetailActivity : AppCompatActivity() {
 
@@ -50,6 +47,7 @@ class DetailActivity : AppCompatActivity() {
     val CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE_BY_BITMAP = 102
 
     var mFile: File? = null
+    var overLocation: String = ""
 
     private lateinit var friend:BEFriend
 
@@ -66,7 +64,20 @@ class DetailActivity : AppCompatActivity() {
             tvName.setText(friend.name)
             tvPhone.setText(friend.phone)
             tvEmail.setText(friend.email)
-            tvLocation.setText(friend.location)
+            if (friend.location != null && friend.location != "")
+            {
+                val unsplitlocation = friend.location
+                val delim = ","
+                val splitlocation = unsplitlocation!!.split(delim)
+                val freindlatitude = splitlocation[0]
+                val freindlongtitude = splitlocation[1]
+                val freindlatitudeFloat = freindlatitude.toDouble()
+                val freindlongitudeFloat = freindlongtitude.toDouble()
+                val Latrounded = String.format("%.3f", freindlatitudeFloat)
+                val Longrounded = String.format("%.3f", freindlongitudeFloat)
+                tvLocation.setText(" ${Latrounded}, ${Longrounded}")
+            }
+
             imgFavorite.setImageResource(if (friend.isFavorite) R.drawable.ok else R.drawable.notok)
             imgFavorite.setOnClickListener{ v -> onClickFavorite()}
 
@@ -75,11 +86,6 @@ class DetailActivity : AppCompatActivity() {
                 val mImage = findViewById<ImageView>(R.id.imgView)
                 val File = File(friend.pictureFile!!)
                 showImageFromFile(mImage, File)
-            }
-
-            if(friend.location != null){
-
-                tvLocation.setText(friend.location)
             }
 
 
@@ -93,7 +99,7 @@ class DetailActivity : AppCompatActivity() {
     fun onClickBack(view: View) { finish() }
     fun onClickSave(view: View) {
         val mRep = FriendRepositoryinDB.get()
-        if(!(tvName.text.isBlank() || tvPhone.text.isBlank()))
+        if(!(tvName.text.isBlank() || tvPhone.text.isBlank() || tvLocation.text.isBlank()))
         {
             //val friendToUpdateIndex = Friends.mFriends.indexOf(Friends.mFriends.find { v -> v.id == friend.id  })
             friend.name = tvName.text.toString()
@@ -101,7 +107,7 @@ class DetailActivity : AppCompatActivity() {
             friend.email = tvEmail.text.toString()
             friend.url = tvUrl.text.toString()
             friend.pictureFile = mFile?.absolutePath
-            friend.location = tvLocation.text.toString()
+            friend.location = overLocation
             //Friends.getAll()[friendToUpdateIndex] = friend
 
             if(friend.id == 0) {
@@ -180,7 +186,10 @@ class DetailActivity : AppCompatActivity() {
         // The type of location is Location? - it can be null... handle cases
 
         if (location != null) {
-            tvLocation.setText(" ${location.latitude}, ${location.longitude}")
+            overLocation = "${location.latitude}, ${location.longitude}"
+            val Latrounded = String.format("%.3f", location.latitude)
+            val Longrounded = String.format("%.3f", location.longitude)
+            tvLocation.setText(" ${Latrounded}, ${Longrounded}")
         } else
             tvLocation.setText("Location = null")
     }
