@@ -67,6 +67,7 @@ class DetailActivity : AppCompatActivity() {
             tvPhone.setText(friend.phone)
             tvEmail.setText(friend.email)
             tvLocation.setText(friend.location)
+            dveditTextDate.setText(friend.birthday)
             imgFavorite.setImageResource(if (friend.isFavorite) R.drawable.ok else R.drawable.notok)
             imgFavorite.setOnClickListener{ v -> onClickFavorite()}
 
@@ -93,7 +94,7 @@ class DetailActivity : AppCompatActivity() {
     fun onClickBack(view: View) { finish() }
     fun onClickSave(view: View) {
         val mRep = FriendRepositoryinDB.get()
-        if(!(tvName.text.isBlank() || tvPhone.text.isBlank()))
+        if(!(tvName.text.isBlank() || tvPhone.text.isBlank() || dveditTextDate.text.isBlank()))
         {
             //val friendToUpdateIndex = Friends.mFriends.indexOf(Friends.mFriends.find { v -> v.id == friend.id  })
             friend.name = tvName.text.toString()
@@ -102,6 +103,7 @@ class DetailActivity : AppCompatActivity() {
             friend.url = tvUrl.text.toString()
             friend.pictureFile = mFile?.absolutePath
             friend.location = tvLocation.text.toString()
+            friend.birthday = dveditTextDate.text.toString()
             //Friends.getAll()[friendToUpdateIndex] = friend
 
             if(friend.id == 0) {
