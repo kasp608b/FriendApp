@@ -51,6 +51,7 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var friend:BEFriend
 
+    //Grabs all information for a specific friend when created.
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
@@ -99,7 +100,10 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
+    //Goes back to previous screen after closing the current window.
     fun onClickBack(view: View) { finish() }
+
+    //Saves all the current information to the fitting places, first checks if there is any missing information.
     fun onClickSave(view: View) {
         val mRep = FriendRepositoryinDB.get()
         if(!(tvName.text.isBlank() || tvPhone.text.isBlank() || tvLocation.text.isBlank()))
@@ -134,6 +138,8 @@ class DetailActivity : AppCompatActivity() {
             ).show()
         }
     }
+
+    //Deletes selected entry.
     fun onClickDelete(view: View) {
         val mRep = FriendRepositoryinDB.get()
         /*val friendToRemove = Friends.mFriends.find { v -> v.id == friend.id  }
@@ -144,6 +150,7 @@ class DetailActivity : AppCompatActivity() {
         finish()
     }
 
+    //Favorites the selected entity, unfavorites if selected is already a favorite.
     fun onClickFavorite(){
         if(friend.isFavorite)
         {
@@ -157,12 +164,15 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
+    //Opens the selected URL in a browser
     fun onClickBrowser(view: View) {
         val url = tvUrl.text.toString()
         val i = Intent(Intent.ACTION_VIEW)
         i.data = Uri.parse(url)
         startActivity(i)
     }
+
+    //Opens the default email client with the chosen recipient input into the client.
     fun onClickEmail(view: View) {
         val emailIntent = Intent(Intent.ACTION_SEND)
         emailIntent.type = "plain/text"
@@ -173,12 +183,15 @@ class DetailActivity : AppCompatActivity() {
             "Hej, Hope that it is ok, Best Regards android...;-)")
         startActivity(emailIntent)
     }
+
+    //Calls the selected entry.
     fun onClickCall(view: View) {
         val intent = Intent(Intent.ACTION_DIAL)
         intent.data = Uri.parse("tel:" + tvPhone.text.toString())
         startActivity(intent)
     }
 
+    //Gets the location for the selected entry.
     @SuppressLint("MissingPermission")
     fun onClickGetLocation(view: View) {
         if (!isPermissionGiven()) {
@@ -199,6 +212,7 @@ class DetailActivity : AppCompatActivity() {
             tvLocation.setText("Location = null")
     }
 
+    //Checks if permission is granted to use the various required parts.
     private fun isPermissionGiven(): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             return permissions.all { p -> checkSelfPermission(p) == PackageManager.PERMISSION_GRANTED}
@@ -207,7 +221,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
 
-
+    //Starts the standard SMS client.
     private fun startSMSActivity() {
         val sendIntent = Intent(Intent.ACTION_VIEW)
         sendIntent.data = Uri.parse("sms:" + tvPhone.text.toString())
@@ -216,11 +230,14 @@ class DetailActivity : AppCompatActivity() {
     }
 
 
-
+    //Calls the startSMSActivity method.
     fun onClickSms(view: View) {
         startSMSActivity()
     }
+
     val permissions = mutableListOf<String>()
+
+    //Checks all permissions.
     private fun checkPermissions() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
 
@@ -232,6 +249,8 @@ class DetailActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, permissions.toTypedArray(), PERMISSION_REQUEST_CODE)
 
     }
+
+    //Checks if the permissions are granted.
     private fun isGranted(permission: String): Boolean =
             ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 
@@ -257,6 +276,7 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
+    //Grabs the new image and inputs it into the app.
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val mImage = findViewById<ImageView>(R.id.imgView)
@@ -275,6 +295,8 @@ class DetailActivity : AppCompatActivity() {
                 } else handleOther(resultCode)
         }
     }
+
+    //Handles cancelling the camera or if the image is not taken.
     private fun handleOther(resultCode: Int) {
         if (resultCode == RESULT_CANCELED)
             Toast.makeText(this, "Canceled...", Toast.LENGTH_LONG).show()
@@ -289,6 +311,7 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
+    //Creates a file to save an image, checks wether or not it can.
     fun onTakeByFile(view: View) {
         mFile = getOutputMediaFile("Camera01") // create a file to save the image
 
@@ -297,7 +320,6 @@ class DetailActivity : AppCompatActivity() {
             return
         }
 
-        // create Intent to take a picture
 
         // create Intent to take a picture
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -337,6 +359,7 @@ class DetailActivity : AppCompatActivity() {
                 "_" + timeStamp + "." + postfix)
     }
 
+    //Clicks the distance button on selected friend, gives distance in meter.
     @SuppressLint("MissingPermission")
      fun onClickDistance(view: View){
         val unsplitlocation = tvLocation.text.toString()
