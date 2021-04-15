@@ -27,6 +27,9 @@ class MainActivity : AppCompatActivity()  {
     }
 
 
+    /**
+     * Sets up the the detail activity for the chosen friend and starts the detail activity
+     */
     fun onListItemClick(position: Int) {
         val mRep = FriendRepositoryinDB.get()
 
@@ -60,6 +63,9 @@ class MainActivity : AppCompatActivity()  {
 
     }
 
+    /**
+     *
+     */
     private fun refresh(){
         val mRep = FriendRepositoryinDB.get()
         val nameObserver = Observer<List<BEFriend>>{ persons ->
