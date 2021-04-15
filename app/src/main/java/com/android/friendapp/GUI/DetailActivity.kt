@@ -70,6 +70,16 @@ class DetailActivity : AppCompatActivity() {
             
             if (friend.location != null && friend.location != "")
             {
+                //unsplitlocation is the full location of the given friend.
+                //delim is the delimiting symbol.
+                //splitlocation is the split location derived from unsplit location and the delimiter.
+                //freindlatitude is the latitude of the friend.
+                //freindlongtitude is the longitude of the friend.
+                //freindlatitudeFloat is freindlatitude converted to double.
+                //freindlongitudeFloat is freindlongtitude converted to double.
+                //Latrounded is the rounded value derived from freindlatitudeFloat.
+                //Longrounded is the rounded value derived from freindlongitudeFloat.
+
                 val unsplitlocation = friend.location
                 val delim = ","
                 val splitlocation = unsplitlocation!!.split(delim)
@@ -166,6 +176,10 @@ class DetailActivity : AppCompatActivity() {
 
     //Opens the selected URL in a browser
     fun onClickBrowser(view: View) {
+
+        //url is the TvURL converted to string.
+        //i is the given intent.
+
         val url = tvUrl.text.toString()
         val i = Intent(Intent.ACTION_VIEW)
         i.data = Uri.parse(url)
@@ -311,7 +325,7 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
-    //Creates a file to save an image, checks wether or not it can.
+    //Creates a file to save an image, checks whether or not it can.
     fun onTakeByFile(view: View) {
         mFile = getOutputMediaFile("Camera01") // create a file to save the image
 

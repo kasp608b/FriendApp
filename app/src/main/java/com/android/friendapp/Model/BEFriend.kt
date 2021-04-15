@@ -6,6 +6,7 @@ import java.io.Serializable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+//Friend business entity, marked as a database room entity, and ID is auto generate-able, and entity is serializable. Data types marked with "?" is nullable.
 @Entity
 class BEFriend(  @PrimaryKey(autoGenerate = true) var id:Int,
                  var name: String,
