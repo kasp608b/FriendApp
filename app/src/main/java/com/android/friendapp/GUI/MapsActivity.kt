@@ -23,9 +23,19 @@ import kotlinx.android.synthetic.main.activity_maps.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
+    /**
+     * saves an instances of the google maps class
+     */
     private lateinit var mMap: GoogleMap
+
+    /**
+     * keep track on the last clicked marker
+     */
     private var mLastIndex = -1
 
+    /**
+     * Sets up the activity when it is started
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
@@ -91,8 +101,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             )
     }*/
 
+    /**
+     *  goes back to the previous activity
+     */
     fun onClickBack(view: View) { finish() }
 
+    /**
+     * handles what happens when a user clicks a marker on the map
+     * when a marker is clicked the first time wil show the info of the marker
+     * if the same marker is clicked twice it will open the detail activity for the friend linked to the marker
+     */
     override fun onMarkerClick(p0: Marker?): Boolean {
 
         if (p0 != null)
