@@ -1,13 +1,15 @@
 package com.android.friendapp.GUI
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ListAdapter
-import android.widget.Toast
+import android.view.ViewGroup
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.android.friendapp.Model.BEFriend
@@ -15,6 +17,7 @@ import com.android.friendapp.Model.FriendRepositoryinDB
 import com.android.friendapp.Model.observeOnce
 import com.android.friendapp.R
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 
 class MainActivity : AppCompatActivity()  {
     /**
@@ -37,37 +40,15 @@ class MainActivity : AppCompatActivity()  {
     /**
      * Sets up the the detail activity for the chosen friend and starts the detail activity
      */
-    fun onListItemClick(position: Int) {
+    fun onListItemClick(view: View) {
         val mRep = FriendRepositoryinDB.get()
 
-        val selectedFromList: String = friendList.getItemAtPosition(position).toString();
-        val valueOnList = selectedFromList.substring(0, selectedFromList.indexOf(","));
-        Log.d("TEST", "The position of selected person is: " + valueOnList);
+        val friend = view.tag as BEFriend
 
-        val id = valueOnList.toInt()
-/*
-        val intent = Intent(this, DetailActivity::class.java)
-
-        intent.putExtra("friend", cache!![position])
-
-        startActivity(intent)
-*/
-        val friendObserver = Observer<BEFriend> { friend ->
-            if (friend != null)
-            {
                 val intent = Intent(this, DetailActivity::class.java)
                 intent.putExtra("friend", friend)
 
                 startActivity(intent)
-
-            }
-
-        }
-
-        mRep.getById(id).observeOnce(this , friendObserver)
-
-
-
     }
 
     /**
@@ -77,17 +58,16 @@ class MainActivity : AppCompatActivity()  {
         val mRep = FriendRepositoryinDB.get()
         val nameObserver = Observer<List<BEFriend>>{ persons ->
             cache = persons;
-            val asStrings = persons.map { p -> "${p.id}, ${p.name}"}
-            val adapter: ListAdapter = ArrayAdapter(
+            val asArray = persons.toTypedArray()
+            val adapter: ListAdapter = FriendAdapter(
                     this,
-                    android.R.layout.simple_list_item_1,
-                    asStrings.toTypedArray()
+                    asArray
             )
             friendList.adapter = adapter
         }
         mRep.getAll().observe(this, nameObserver)
 
-        friendList.onItemClickListener = AdapterView.OnItemClickListener { _, _, pos, _ -> onListItemClick(pos)}
+        friendList.onItemClickListener = AdapterView.OnItemClickListener { _, view, pos, _ -> onListItemClick(view)}
 
        // mRep.insert(BEFriend(0,"jake","444444'",false,"b@hotmail.com"  , "https://www.msn.com/da-dk/" , null ))
     }
@@ -97,7 +77,7 @@ class MainActivity : AppCompatActivity()  {
      */
      fun onClickCreate(view: View){
          val intent = Intent(this, DetailActivity::class.java)
-         val friend = BEFriend(0, "DefaultName", "DefaultPhoneNumber", false, "DefaultEmail@hotmail.com", "https://www.msn.com/da-dk/", null, null ,"day/month/year")
+         val friend = BEFriend(0, "DefaultName", "DefaultPhoneNumber", false, "DefaultEmail@hotmail.com", "https://www.msn.com/da-dk/", null, null ,"day/month/year", null)
 
          /* val mRep = FriendRepositoryinDB.get()
          mRep.insert(friend)*/
@@ -125,6 +105,50 @@ class MainActivity : AppCompatActivity()  {
     override fun onStart() {
         super.onStart()
         refresh()
+    }
+
+    internal class FriendAdapter(context: Context,
+                                 private val friends: Array<BEFriend>
+    ) : ArrayAdapter<BEFriend>(context, 0, friends)
+    {
+        private val colours = intArrayOf(
+                Color.parseColor("#AAAAAA"),
+                Color.parseColor("#CCCCCC")
+        )
+
+        override fun getView(position: Int, v: View?, parent: ViewGroup): View {
+            var v1: View? = v
+            if (v1 == null) {
+                val mInflater = LayoutInflater.from(context)
+                v1 = mInflater.inflate(R.layout.cell_extended, null)
+
+            }
+            val resView: View = v1!!
+            resView.setBackgroundColor(colours[position % colours.size])
+            val f = friends[position]
+            val nameView = resView.findViewById<TextView>(R.id.tvNameExt)
+            val favoriteView = resView.findViewById<ImageView>(R.id.imgFavoriteExt)
+            val pictureView = resView.findViewById<ImageView>(R.id.FriendPicture)
+            nameView.text = f.name
+
+            if(f.pictureFile != null)
+            {
+                val File = File(f.pictureFile!!)
+                showImageFromFile(pictureView, File)
+            }
+            resView.tag = f
+
+            favoriteView.setImageResource(if (f.isFavorite) R.drawable.ok else R.drawable.notok)
+            return resView
+        }
+
+        // show the image allocated in [f] in imageview [img]. Show meta data in [txt]
+        private fun showImageFromFile(img: ImageView,  f: File) {
+            img.setImageURI(Uri.fromFile(f))
+            img.setBackgroundColor(Color.RED)
+            //mImage.setRotation(90);
+
+        }
     }
 
 

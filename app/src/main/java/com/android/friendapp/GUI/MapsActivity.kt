@@ -1,10 +1,15 @@
 package com.android.friendapp.GUI
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import com.android.friendapp.Model.BEFriend
 import com.android.friendapp.Model.FriendRepositoryinDB
@@ -49,7 +54,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -59,7 +63,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         val mRep = FriendRepositoryinDB.get()
         val friendObserver = Observer<List<BEFriend>>{ friends ->
             val list = friends;
-            var i = 1
+            var i = 2
             for (friend: BEFriend in list)
             {
                 if (friend.location !== null && friend.location != "")
@@ -82,8 +86,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
 
         mRep.getAll().observe(this, friendObserver)
-
         mMap.setOnMarkerClickListener(this)
+
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return
+        }
+
+        val myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        val myLatLng: LatLng
+        if(myLocation != null)
+        {
+            myLatLng = LatLng(myLocation.latitude, myLocation.longitude)
+            val myMarker = MarkerOptions().position(myLatLng).title("My Location")
+            val myLocationMarker = mMap.addMarker(myMarker)
+            myLocationMarker.tag = 1
+        }
+
+
+
+
 
         /*val sydney = LatLng(-34.0, 151.0)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
@@ -115,35 +138,39 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         if (p0 != null)
         {
-            var index = p0.tag as Int
-            if(mLastIndex != index)
+            if (p0.tag != 1)
             {
-                p0.showInfoWindow()
-                mLastIndex = index
-            } else {
-                p0.hideInfoWindow()
-                mLastIndex = -1
-                val mRep = FriendRepositoryinDB.get()
-                val valueOnList = p0.title?.substring(0, p0.title.indexOf(","))
-                val id = valueOnList?.toInt()
-                val friendObserver = Observer<BEFriend> { friend ->
-                    if (friend != null)
-                    {
-                        val intent = Intent(this, DetailActivity::class.java)
-                        intent.putExtra("friend", friend)
+                var index = p0.tag as Int
+                if(mLastIndex != index)
+                {
+                    p0.showInfoWindow()
+                    mLastIndex = index
+                } else {
+                    p0.hideInfoWindow()
+                    mLastIndex = -1
+                    val mRep = FriendRepositoryinDB.get()
+                    val valueOnList = p0.title?.substring(0, p0.title.indexOf(","))
+                    val id = valueOnList?.toInt()
+                    val friendObserver = Observer<BEFriend> { friend ->
+                        if (friend != null)
+                        {
+                            val intent = Intent(this, DetailActivity::class.java)
+                            intent.putExtra("friend", friend)
 
-                        startActivity(intent)
+                            startActivity(intent)
+
+                        }
 
                     }
 
+                    if (id != null) {
+                        mRep.getById(id).observeOnce(this , friendObserver)
+                        return true
+                    }
+                    return false
                 }
-
-                if (id != null) {
-                    mRep.getById(id).observeOnce(this , friendObserver)
-                    return true
-                }
-                return false
             }
+
         }
         return false
 

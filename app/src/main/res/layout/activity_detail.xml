@@ -8,15 +8,27 @@
     tools:context=".GUI.DetailActivity">
 
     <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginStart="10dp"
+        android:text="Address:"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvAddress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvAddress" />
+
+    <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Detail View"
-        android:textSize="35dp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
     <TextView
@@ -25,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginStart="10dp"
+        android:textSize="12sp"
         android:text="Name:"
         app:layout_constraintBottom_toBottomOf="@+id/tvName"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:gravity="right"
+        android:textSize="12sp"
         android:text="anders"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -47,6 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginStart="10dp"
+        android:textSize="12sp"
         android:text="Phone:"
         app:layout_constraintBottom_toBottomOf="@+id/tvPhone"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,6 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="10dp"
+        android:textSize="12sp"
         android:gravity="right"
         android:text="12345678"
         app:layout_constraintStart_toEndOf="@+id/textView3"
@@ -66,8 +82,9 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:textSize="12sp"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:onClick="onClickCall"
@@ -78,8 +95,9 @@
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:textSize="12sp"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:layout_marginStart="10dp"
@@ -95,6 +113,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:textSize="12sp"
         android:gravity="right"
         android:text="Favorite:"
         app:layout_constraintBottom_toBottomOf="@+id/imgFavorite"
@@ -116,6 +135,7 @@
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="12sp"
         android:layout_gravity="right"
         android:layout_marginStart="10dp"
         android:text="location:"
@@ -127,16 +147,19 @@
         android:id="@+id/tvLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
         android:gravity="right"
         android:text="anders"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/textView7"
         app:layout_constraintTop_toBottomOf="@+id/tvUrl" />
 
     <Button
         android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:textSize="12sp"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:onClick="onClickGetLocation"
@@ -150,6 +173,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
+        android:textSize="12sp"
         android:layout_marginStart="10dp"
         android:text="Url:"
         app:layout_constraintBottom_toBottomOf="@+id/tvUrl"
@@ -162,6 +186,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="27dp"
         android:layout_marginTop="10dp"
+        android:textSize="12sp"
         android:gravity="right"
         android:text="anders"
         app:layout_constraintStart_toEndOf="@+id/textView6"
@@ -169,8 +194,9 @@
 
     <Button
         android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:textSize="12sp"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:layout_marginStart="10dp"
@@ -185,6 +211,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
+        android:textSize="12sp"
         android:layout_marginStart="10dp"
         android:text="Email:"
         app:layout_constraintBottom_toBottomOf="@+id/tvEmail"
@@ -193,6 +220,7 @@
 
     <EditText
         android:id="@+id/tvEmail"
+        android:textSize="12sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -204,8 +232,9 @@
 
     <Button
         android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="75dp"
+        android:layout_height="40dp"
+        android:textSize="12sp"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:layout_marginStart="10dp"
@@ -215,19 +244,28 @@
         app:layout_constraintStart_toEndOf="@+id/tvEmail"
         app:layout_constraintTop_toBottomOf="@+id/imgFavorite" />
 
+    <EditText
+        android:id="@+id/tvAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:gravity="right"
+        android:text="Address"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/textView9"
+        app:layout_constraintTop_toBottomOf="@+id/dveditTextDate" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dveditTextDate">
+        app:layout_constraintTop_toBottomOf="@+id/tvAddress">
 
         <ImageView
             android:id="@+id/imgView"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
@@ -239,13 +277,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:layout_marginEnd="10dp"
             android:onClick="onTakeByFile"
             android:text="picture"
+            android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imgView"
@@ -265,28 +304,31 @@
             app:layout_constraintTop_toBottomOf="@+id/imgView">
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:onClick="onClickBack"
-                android:text="@string/Back_Text" />
+                android:text="@string/Back_Text"
+                android:textSize="12sp" />
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="70dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:onClick="onClickSave"
-                android:text="@string/Save_Text" />
+                android:text="@string/Save_Text"
+                android:textSize="12sp" />
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="85dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:onClick="onClickDelete"
-                android:text="@string/Delete_Text" />
+                android:text="@string/Delete_Text"
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -296,17 +338,19 @@
         android:id="@+id/tvDistance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="distance"
+        android:layout_marginStart="10dp"
+        android:text="distance:"
         app:layout_constraintBottom_toBottomOf="@+id/button6"
         app:layout_constraintEnd_toEndOf="@+id/tvLocation"
-        app:layout_constraintHorizontal_bias="0.93"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvLocation" />
 
     <Button
         android:id="@+id/button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:textSize="12sp"
         android:onClick="onClickDistance"
         android:text="Distance"
         app:layout_constraintEnd_toEndOf="@+id/button4"
@@ -319,16 +363,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="Birthday"
+        android:text="Birthday:"
         app:layout_constraintBottom_toBottomOf="@+id/dveditTextDate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dveditTextDate" />
 
     <EditText
         android:id="@+id/dveditTextDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:textSize="12sp"
         android:ems="10"
         android:inputType="date"
         app:layout_constraintStart_toEndOf="@+id/textView8"
