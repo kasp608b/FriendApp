@@ -17,8 +17,15 @@ import com.android.friendapp.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity()  {
+    /**
+     * list of friends
+     */
     var cache: List<BEFriend>? = null;
-    val TAG = "xyz"
+
+
+    /**
+     * sets up the detail on start up and initializes the database
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -64,7 +71,7 @@ class MainActivity : AppCompatActivity()  {
     }
 
     /**
-     *
+     * Refreshes the friend list by comparing the cache's list with the databases list of friends
      */
     private fun refresh(){
         val mRep = FriendRepositoryinDB.get()
@@ -85,9 +92,12 @@ class MainActivity : AppCompatActivity()  {
        // mRep.insert(BEFriend(0,"jake","444444'",false,"b@hotmail.com"  , "https://www.msn.com/da-dk/" , null ))
     }
 
+    /**
+     * Sets up the activity view for creating a new friend and starts it
+     */
      fun onClickCreate(view: View){
          val intent = Intent(this, DetailActivity::class.java)
-         val friend = BEFriend(0, "DefaultName", "DefaultPhoneNumber", false, "DefaultEmail@hotmail.com", "https://www.msn.com/da-dk/", null, null ,"day/month/year")
+         val friend = BEFriend(0, "DefaultName", "DefaultPhoneNumber", false, "DefaultEmail@hotmail.com", "https://www.msn.com/da-dk/", null, null ,"day/month/year", null)
 
          /* val mRep = FriendRepositoryinDB.get()
          mRep.insert(friend)*/
@@ -101,11 +111,17 @@ class MainActivity : AppCompatActivity()  {
          startActivity(intent)
     }
 
+    /**
+     * launches the map activity
+     */
     fun onClickMap(view: View) {
         val intent = Intent(this, MapsActivity::class.java)
         startActivity(intent)
     }
 
+    /**
+     * refreshes the main activity each time it starts
+     */
     override fun onStart() {
         super.onStart()
         refresh()
