@@ -4,27 +4,27 @@ object Friends {
     public var nextId = 22
 
     public val mFriends = mutableListOf<BEFriend>(
-        BEFriend(1,"Jonas", "123", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null , null),
-        BEFriend(2, "Anders", "1234", false, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null , null),
-        BEFriend(3,"Nikolaj", "12345", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(4,"Nadia", "12345678", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(5, "Michael", "23456789", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(6,"Kacper", "87654321", false, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(7, "Rocio", "12121212", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(8, "Jonas", "123", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(9,"Anders", "1234", false, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(10,"Nikolaj", "12345", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(11, "Nadia", "12345678", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(12, "Michael", "23456789", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(13, "Kacper", "87654321", false, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(14, "Rocio", "12121212", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(15, "Jonas", "123", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(16,"Anders", "1234", false, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(17, "Nikolaj", "12345", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null),
-        BEFriend(18, "Nadia", "12345678", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null ,null),
-        BEFriend(19, "Michael", "23456789", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null , null),
-        BEFriend(20, "Kacper", "87654321", false, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null ,null),
-        BEFriend(21, "Rocio", "12121212", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null)
+        BEFriend(1,"Jonas", "123", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null , null , null),
+        BEFriend(2, "Anders", "1234", false, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null , null, null),
+        BEFriend(3,"Nikolaj", "12345", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(4,"Nadia", "12345678", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(5, "Michael", "23456789", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(6,"Kacper", "87654321", false, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(7, "Rocio", "12121212", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(8, "Jonas", "123", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(9,"Anders", "1234", false, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(10,"Nikolaj", "12345", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(11, "Nadia", "12345678", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(12, "Michael", "23456789", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(13, "Kacper", "87654321", false, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(14, "Rocio", "12121212", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(15, "Jonas", "123", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(16,"Anders", "1234", false, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(17, "Nikolaj", "12345", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null),
+        BEFriend(18, "Nadia", "12345678", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null ,null, null),
+        BEFriend(19, "Michael", "23456789", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null , null, null),
+        BEFriend(20, "Kacper", "87654321", false, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null ,null, null),
+        BEFriend(21, "Rocio", "12121212", true, "jonas@hotmail.com","https://www.msn.com/da-dk/", null,null, null, null)
     )
 
     public fun getAll(): MutableList<BEFriend> = mFriends
