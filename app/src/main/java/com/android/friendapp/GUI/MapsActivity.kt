@@ -1,30 +1,30 @@
 package com.android.friendapp.GUI
 
 import android.Manifest
+import android.R.attr.src
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import com.android.friendapp.Model.BEFriend
 import com.android.friendapp.Model.FriendRepositoryinDB
 import com.android.friendapp.Model.observeOnce
 import com.android.friendapp.R
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.activity_maps.*
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -60,49 +60,89 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
      */
     override fun onMapReady(googleMap: GoogleMap)  {
         mMap = googleMap
-        val mRep = FriendRepositoryinDB.get()
-        val friendObserver = Observer<List<BEFriend>>{ friends ->
-            val list = friends;
-            var i = 2
-            for (friend: BEFriend in list)
-            {
-                if (friend.location !== null && friend.location != "")
+        if (intent.extras == null)
+        {
+            val mRep = FriendRepositoryinDB.get()
+            val friendObserver = Observer<List<BEFriend>>{ friends ->
+                val list = friends;
+                var i = 2
+                for (friend: BEFriend in list)
                 {
-                    val unsplitlocation = friend.location
-                    val delim = ","
-                    val splitlocation = unsplitlocation!!.split(delim)
-                    val freindlatitude = splitlocation[0]
-                    val freindlongitude = splitlocation[1]
-                    val freindlatitudeFloat = freindlatitude.toDouble()
-                    val freindlongitudeFloat = freindlongitude.toDouble()
-                    val location = LatLng(freindlatitudeFloat, freindlongitudeFloat)
-                    val marker = MarkerOptions().position(location).title("${friend.id}, ${friend.name}")
-                    val locationMarker = mMap.addMarker(marker)
-                    locationMarker.tag = i
-                    i++
+                    if (friend.location !== null && friend.location != "")
+                    {
+                        val unsplitlocation = friend.location
+                        val delim = ","
+                        val splitlocation = unsplitlocation!!.split(delim)
+                        val freindlatitude = splitlocation[0]
+                        val freindlongitude = splitlocation[1]
+                        val freindlatitudeFloat = freindlatitude.toDouble()
+                        val freindlongitudeFloat = freindlongitude.toDouble()
+                        val location = LatLng(freindlatitudeFloat, freindlongitudeFloat)
+                        val marker = MarkerOptions().position(location).title("${friend.id}, ${friend.name}")
+                        val locationMarker = mMap.addMarker(marker)
+                        locationMarker.tag = i
+                        i++
 
+                    }
                 }
             }
+
+            mRep.getAll().observe(this, friendObserver)
+            mMap.setOnMarkerClickListener(this)
+
+            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                return
+            }
+
+            val myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            val myLatLng: LatLng
+            if(myLocation != null)
+            {
+                myLatLng = LatLng(myLocation.latitude, myLocation.longitude)
+                val myMarker = MarkerOptions().position(myLatLng).title("My Location")
+                val myLocationMarker = mMap.addMarker(myMarker)
+                myLocationMarker.tag = 1
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLatLng))
+            }
+
         }
-
-        mRep.getAll().observe(this, friendObserver)
-        mMap.setOnMarkerClickListener(this)
-
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            return
-        }
-
-        val myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        val myLatLng: LatLng
-        if(myLocation != null)
+        else
         {
-            myLatLng = LatLng(myLocation.latitude, myLocation.longitude)
-            val myMarker = MarkerOptions().position(myLatLng).title("My Location")
-            val myLocationMarker = mMap.addMarker(myMarker)
-            myLocationMarker.tag = 1
+            mMap.setOnMarkerClickListener(this)
+
+            val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                return
+            }
+
+            val myLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            val myLatLng: LatLng
+            if(myLocation != null)
+            {
+                myLatLng = LatLng(myLocation.latitude, myLocation.longitude)
+                val myMarker = MarkerOptions().position(myLatLng).title("My Location")
+                val myLocationMarker = mMap.addMarker(myMarker)
+                myLocationMarker.tag = 1
+            }
+
+            val friend = intent.extras!!.getSerializable("friend") as BEFriend
+            val unsplitlocation = friend.location
+            val delim = ","
+            val splitlocation = unsplitlocation!!.split(delim)
+            val freindlatitude = splitlocation[0]
+            val freindlongtitude = splitlocation[1]
+            val friendLatLng = LatLng(freindlatitude.toDouble(), freindlongtitude.toDouble())
+            val friendMarker = MarkerOptions().position(friendLatLng).title("${friend.id}, ${friend.name}")
+            val friendLocationMarker = mMap.addMarker(friendMarker)
+            friendLocationMarker.tag = 2
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(friendLatLng))
+
+
         }
+
 
 
 
@@ -138,38 +178,44 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         if (p0 != null)
         {
-            if (p0.tag != 1)
-            {
+
                 var index = p0.tag as Int
                 if(mLastIndex != index)
                 {
                     p0.showInfoWindow()
                     mLastIndex = index
-                } else {
-                    p0.hideInfoWindow()
-                    mLastIndex = -1
-                    val mRep = FriendRepositoryinDB.get()
-                    val valueOnList = p0.title?.substring(0, p0.title.indexOf(","))
-                    val id = valueOnList?.toInt()
-                    val friendObserver = Observer<BEFriend> { friend ->
-                        if (friend != null)
-                        {
-                            val intent = Intent(this, DetailActivity::class.java)
-                            intent.putExtra("friend", friend)
+                }
+                else
+                {
+                    if (p0.tag != 1)
+                    {
+                        p0.hideInfoWindow()
+                        mLastIndex = -1
+                        val mRep = FriendRepositoryinDB.get()
+                        val valueOnList = p0.title?.substring(0, p0.title.indexOf(","))
+                        val id = valueOnList?.toInt()
+                        val friendObserver = Observer<BEFriend> { friend ->
+                            if (friend != null)
+                            {
+                                val intent = Intent(this, DetailActivity::class.java)
+                                intent.putExtra("friend", friend)
 
-                            startActivity(intent)
+                                startActivity(intent)
+
+                            }
 
                         }
 
+                        if (id != null)
+                        {
+                            mRep.getById(id).observeOnce(this, friendObserver)
+                            return true
+                        }
+                        return false
                     }
 
-                    if (id != null) {
-                        mRep.getById(id).observeOnce(this , friendObserver)
-                        return true
-                    }
-                    return false
                 }
-            }
+
 
         }
         return false

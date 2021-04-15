@@ -101,6 +101,7 @@ class DetailActivity : AppCompatActivity() {
             {
                 val mImage = findViewById<ImageView>(R.id.imgView)
                 val File = File(friend.pictureFile!!)
+                mFile = File
                 showImageFromFile(mImage, File)
             }
 
@@ -126,6 +127,7 @@ class DetailActivity : AppCompatActivity() {
             friend.email = tvEmail.text.toString()
             friend.url = tvUrl.text.toString()
             friend.pictureFile = mFile?.absolutePath
+
             friend.location = tvLocation.text.toString()
             friend.birthday = dveditTextDate.text.toString()
             friend.location = overLocation
@@ -439,7 +441,13 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
+    fun onClickShow(view: View) {
+        val intent = Intent(this, MapsActivity::class.java)
+        intent.putExtra("friend", friend)
+        startActivity(intent)
     }
+
+}
 
 
 

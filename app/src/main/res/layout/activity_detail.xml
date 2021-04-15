@@ -174,7 +174,7 @@
         android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_margin="5dp"
-        android:onClick="onClickGetLocation"
+        android:onClick="onClickShow"
         android:text="Show"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/button4"
