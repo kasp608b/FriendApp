@@ -159,11 +159,11 @@
         android:id="@+id/button4"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:textSize="12sp"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:onClick="onClickGetLocation"
-        android:text="location"
+        android:text="Home"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/tvLocation"
         app:layout_constraintStart_toEndOf="@+id/tvLocation"
         app:layout_constraintTop_toTopOf="@+id/tvLocation" />

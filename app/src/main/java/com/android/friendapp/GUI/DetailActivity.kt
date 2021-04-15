@@ -67,6 +67,7 @@ class DetailActivity : AppCompatActivity() {
             tvEmail.setText(friend.email)
             tvLocation.setText(friend.location)
             dveditTextDate.setText(friend.birthday)
+            tvAddress.setText(friend.Address)
             
             if (friend.location != null && friend.location != "")
             {
@@ -127,6 +128,7 @@ class DetailActivity : AppCompatActivity() {
             friend.location = tvLocation.text.toString()
             friend.birthday = dveditTextDate.text.toString()
             friend.location = overLocation
+            friend.Address = tvAddress.text.toString()
             //Friends.getAll()[friendToUpdateIndex] = friend
 
             if(friend.id == 0) {
