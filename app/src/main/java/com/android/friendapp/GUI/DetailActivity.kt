@@ -80,6 +80,7 @@ class DetailActivity : AppCompatActivity() {
                 //Latrounded is the rounded value derived from freindlatitudeFloat.
                 //Longrounded is the rounded value derived from freindlongitudeFloat.
 
+                overLocation = friend.location!!
                 val unsplitlocation = friend.location
                 val delim = ","
                 val splitlocation = unsplitlocation!!.split(delim)
@@ -376,7 +377,7 @@ class DetailActivity : AppCompatActivity() {
     //Clicks the distance button on selected friend, gives distance in meter.
     @SuppressLint("MissingPermission")
      fun onClickDistance(view: View){
-        val unsplitlocation = tvLocation.text.toString()
+        val unsplitlocation = overLocation
         if(!unsplitlocation.isEmpty()){
             val delim = ","
             val splitlocation = unsplitlocation.split(delim)
